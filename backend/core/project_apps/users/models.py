@@ -4,6 +4,5 @@ from project_apps.plans.models import Plan
 
 class CustomUser(AbstractUser):
     plan = models.ForeignKey(Plan,
-                             on_delete=models.CASCADE,
-                             blank=True,
-                             null=True)
+                             on_delete=models.PROTECT,
+                             default=1)
