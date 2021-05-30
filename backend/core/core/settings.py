@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     #apps
     'project_apps.users',
     'project_apps.plans',
-    'project_apps.images'
+    'project_apps.images',
+    'project_apps.image_api_service'
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
