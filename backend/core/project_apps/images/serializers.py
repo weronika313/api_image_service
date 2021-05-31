@@ -17,7 +17,9 @@ class ImageSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         image = Image.objects.create(**validated_data)
-        image.generate_image_thumbnails()
+        available_heights = image.get_available_thumbnails_sizes()
+        if available_heights:
+            image.generate_image_thumbnails(available_heights)
         return image
 
     def get_thumbnails(self, image):
@@ -38,7 +40,8 @@ class ImageSerializerWithOrgImg(serializers.ModelSerializer):
     def create(self, validated_data):
         image = Image.objects.create(**validated_data)
         available_heights = image.get_available_thumbnails_sizes()
-        image.generate_image_thumbnails(available_heights)
+        if available_heights:
+            image.generate_image_thumbnails(available_heights)
         return image
 
     def get_thumbnails(self, image):

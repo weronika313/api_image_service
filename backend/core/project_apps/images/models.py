@@ -30,7 +30,7 @@ class Image(models.Model):
         thumbnail_width = self.get_thumbnail_width(thumbnail_height)
         size = f'{thumbnail_width}x{thumbnail_height}'
         img = get_thumbnail(self.image, size, quality=90)
-        Thumbnail.objects.create(thumbnail=img.url, size=size, org_image=self)
+        Thumbnail.objects.create(thumbnail=img.url, size=thumbnail_height, org_image=self)
 
     def get_thumbnail_width(self, thumb_height):
         image = pil_image.open(self.image)
