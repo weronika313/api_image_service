@@ -20,6 +20,7 @@ class Image(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
 
+
     def get_available_thumbnails_sizes(self):
         user = User.objects.filter(pk=self.owner.id).first()
         available_thumbnail_sizes = user.get_available_thumbnail_sizes()
@@ -45,10 +46,8 @@ class Image(models.Model):
             for thumb in thumbnails:
                 thumb.delete()
 
-    def generate_image_thumbnails(self):
+    def generate_image_thumbnails(self, thumbnail_heights):
         self.delete_old_thumbnails()
-
-        thumbnail_heights = self.get_available_thumbnails_sizes()
 
         for height in thumbnail_heights:
             self.make_thumbnail(height)
@@ -68,7 +67,7 @@ class Thumbnail(models.Model):
 
 @receiver(pre_save, sender=User)
 @transaction.atomic
-def do_something_if_changed(sender, instance, **kwargs):
+def make_new_thumbnails_if_plan_changed(sender, instance, **kwargs):
     try:
         obj = sender.objects.select_for_update().get(pk=instance.pk)
     except sender.DoesNotExist:
@@ -76,7 +75,9 @@ def do_something_if_changed(sender, instance, **kwargs):
     else:
         if not obj.plan == instance.plan:  # Field has changed
             user_images = Image.objects.filter(owner=obj.pk)
+            new_thumb_heights = instance.plan.get_available_thumbnail_sizes_list()
 
             for image in user_images:
-                image.generate_image_thumbnails()
+
+                image.generate_image_thumbnails(new_thumb_heights)
 

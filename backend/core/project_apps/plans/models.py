@@ -10,8 +10,8 @@ class ThumbnailSize(models.Model):
 
 class Plan(models.Model):
     name = models.CharField(max_length=125)
-    presence_a_link_to_org_img = models.BooleanField(default=False)
-    ability_to_generate_expiring_links = models.BooleanField(default=False)
+    has_access_to_org_img = models.BooleanField(default=False)
+    can_generate_expiring_links = models.BooleanField(default=False)
 
     available_thumbnail_sizes = models.ManyToManyField(ThumbnailSize)
 

@@ -3,7 +3,7 @@ from .models import Plan, ThumbnailSize
 
 @admin.register(Plan)
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ('name', 'presence_a_link_to_org_img', 'ability_to_generate_expiring_links',
+    list_display = ('name', 'has_access_to_org_img', 'can_generate_expiring_links',
                     'display_available_thumbnail_sizes')
 
 
