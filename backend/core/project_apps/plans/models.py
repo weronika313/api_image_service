@@ -19,6 +19,9 @@ class Plan(models.Model):
         """Create a string for the thumbnail_sizes. This is required to display sizes in Admin."""
         return ', '.join(str(size) for size in self.available_thumbnail_sizes.all()[:3])
 
+    def get_available_thumbnail_sizes_list(self):
+        return [th_size.size for th_size in self.available_thumbnail_sizes.all()]
+
     display_available_thumbnail_sizes.short_description = 'Available thumbnail sizes'
 
     def __str__(self):
