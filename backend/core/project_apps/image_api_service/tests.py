@@ -1,11 +1,25 @@
+import datetime
 import io
+from time import sleep
 
-from PIL import Image
+from PIL import Image as Img_pil
 from django.test import TestCase
 
 from project_apps.users.models import CustomUser as User
 
 from project_apps.plans.models import Plan, ThumbnailSize
+
+from project_apps.images.models import Image
+from rest_framework.reverse import reverse
+
+
+def generate_image_file():
+    file = io.BytesIO()
+    image = Img_pil.new('RGBA', size=(500, 500), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test.png'
+    file.seek(0)
+    return file
 
 
 class ImageViewSetTestCase(TestCase):
@@ -41,18 +55,10 @@ class ImageViewSetTestCase(TestCase):
 
         self.user = User.objects.create_user(self.username, password=self.password, plan=self.basic_plan)
 
-    def generate_photo_file(self):
-        file = io.BytesIO()
-        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
-        return file
-
     def test_image_upload(self):
         logged_in = self.client.login(username=self.username, password=self.password)
 
-        img_to_upload = self.generate_photo_file()
+        img_to_upload = generate_image_file()
 
         input_data = {
             "title": "test",
@@ -85,7 +91,7 @@ class ImageViewSetTestCase(TestCase):
         self.user.plan = self.enterprise_plan
         self.user.save()
 
-        img_to_upload = self.generate_photo_file()
+        img_to_upload = generate_image_file()
 
         input_data = {
             "title": "test",
@@ -100,6 +106,12 @@ class ImageViewSetTestCase(TestCase):
 
         input_data = {
             'time_to_expiry': 300
+        }
+        response = self.client.post(get_expiring_link_url, data=input_data, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        input_data = {
+            'time_to_expiry': 30000
         }
         response = self.client.post(get_expiring_link_url, data=input_data, format='json')
         self.assertEqual(response.status_code, 200)
@@ -122,14 +134,14 @@ class ImageViewSetTestCase(TestCase):
         response = self.client.post(get_expiring_link_url, data=input_data, format='json')
         self.assertEqual(response.status_code, 400)
 
-    def test_get_org_img_link(self):
+    def test_get_original_img_link(self):
         logged_in = self.client.login(username=self.username, password=self.password)
 
         # change plan to premium to get link to original img
         self.user.plan = self.premium_plan
         self.user.save()
 
-        img_to_upload = self.generate_photo_file()
+        img_to_upload = generate_image_file()
 
         input_data = {
             "title": "test",
@@ -143,7 +155,43 @@ class ImageViewSetTestCase(TestCase):
         image_in_response = True if "image" in response.data else False
 
         self.assertTrue(image_in_response)
-        
 
+
+class ExpiringLinkApiViewTestCase(TestCase):
+    def setUp(self):
+        self.basic_plan = Plan.objects.create(name="Basic",
+                                              has_access_to_org_img=False,
+                                              can_generate_expiring_links=True)
+
+        self.username = 'testuser'
+        self.password = 'testpass'
+
+        self.user = User.objects.create_user(self.username, password=self.password, plan=self.basic_plan)
+
+        img_to_upload = generate_image_file()
+
+        input_data = {
+            "title": "test",
+            "description": "test",
+            "image": img_to_upload
+        }
+
+        upload_img_url = "/api/v1/images"
+        logged_in = self.client.login(username=self.username, password=self.password)
+        self.client.post(upload_img_url, data=input_data, format='json')
+
+    def test_expiring_link(self):
+        time = datetime.datetime.now() + datetime.timedelta(seconds=1)
+
+        image = Image.objects.filter(owner = self.user.id).first()
+        expiring_link_url = reverse(
+            "expiring-link",
+            kwargs={"id": image.id, 'expiring_time': time},
+        )
+
+        response = self.client.get(expiring_link_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, "image/png")
 
 
