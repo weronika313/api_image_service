@@ -9,5 +9,5 @@ router.register(r'images', ImageViewSet, basename="images")
 
 urlpatterns = [
     url(r"^", include(router.urls)),
-    path("expiring_image/id/<id>/<expiring_time>", ExpiringLinkAPIView.as_view(), name='expiring-link')
+    path("expiring_image/<link_uuid>", ExpiringLinkAPIView.as_view(), name='expiring-link')
 ]

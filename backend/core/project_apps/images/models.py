@@ -18,8 +18,7 @@ class Image(models.Model):
     image = models.ImageField(upload_to='images/')
     created_at = models.DateTimeField(default=timezone.now())
 
-    owner = models.ForeignKey(User, on_delete=models.PROTECT)
-
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_available_thumbnails_sizes(self):
         user = User.objects.filter(pk=self.owner.id).first()

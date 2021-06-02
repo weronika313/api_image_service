@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'project_apps.users',
     'project_apps.plans',
     'project_apps.images',
-    'project_apps.image_api_service'
+    'project_apps.image_api_service',
+    'project_apps.expiring_url'
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
