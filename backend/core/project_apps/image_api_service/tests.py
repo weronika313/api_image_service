@@ -155,3 +155,45 @@ class ImageViewSetTestCase(TestCase):
         image_in_response = True if "image" in response.data else False
 
         self.assertTrue(image_in_response)
+
+
+class ExpiringLinkApiViewTestCase(TestCase):
+    def setUp(self):
+        self.basic_plan = Plan.objects.create(name="Basic",
+                                              has_access_to_org_img=False,
+                                              can_generate_expiring_links=True)
+
+        self.username = 'testuser'
+        self.password = 'testpass'
+
+        self.user = User.objects.create_user(self.username, password=self.password, plan=self.basic_plan)
+
+        img_to_upload = generate_image_file()
+
+        input_data = {
+            "title": "test",
+            "description": "test",
+            "image": img_to_upload
+        }
+
+        upload_img_url = "/api/v1/images"
+        logged_in = self.client.login(username=self.username, password=self.password)
+
+        self.client.post(upload_img_url, data=input_data, format='json')
+
+        get_expiring_link_url = "/api/v1/images/1/generate_expiring_link"
+
+        input_data = {
+            'time_to_expiry': 300
+        }
+        response = self.client.post(get_expiring_link_url, data=input_data, format='json')
+
+        self.expiring_link = response.data['expiring-link']
+
+    def test_expiring_link(self):
+        response = self.client.get(self.expiring_link)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, "image/png")
+
+
