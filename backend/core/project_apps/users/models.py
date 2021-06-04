@@ -8,7 +8,8 @@ from project_apps.plans.models import Plan
 class CustomUser(AbstractUser):
     plan = models.ForeignKey(Plan,
                              on_delete=models.PROTECT,
-                             default=1)
+                             null=True,
+                             blank=True)
 
     def get_available_thumbnail_sizes(self):
         user_plan = Plan.objects.filter(pk=self.plan.id).first()

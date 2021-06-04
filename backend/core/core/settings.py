@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'sorl.thumbnail',
+    'storages',
     
     #apps
     'project_apps.users',
@@ -131,6 +132,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -138,3 +140,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+AWS_ACCESS_KEY_ID = "AKIAVCZUA6SOH5TUBWWD"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME = "image-api-service"
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = "eu-north-1"
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
