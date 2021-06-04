@@ -8,6 +8,7 @@ from project_apps.images.models import Image
 
 class ExpiringUrlExpired(Exception):
     """Custom exception raised when trying to use an expired link."""
+
     pass
 
 
@@ -25,8 +26,18 @@ class ExpiringUrl(models.Model):
 
     def get_absolute_url(self, request):
         """Returns the reverse() url."""
-        return reverse('expiring-link', kwargs={'link_uuid': str(self.uuid)}, request=request)
+        return reverse(
+            "expiring-link", kwargs={"link_uuid": str(self.uuid)}, request=request
+        )
 
     def reverse(self, request):
         return self.get_absolute_url(request)
 
+    def get_image(self):
+
+        if self.has_expired:
+            raise ExpiringUrlExpired
+
+        image = self.image.image
+
+        return image

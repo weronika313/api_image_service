@@ -10,18 +10,31 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('images', '0008_auto_20210602_1557'),
+        ("images", "0008_auto_20210602_1557"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ExpiringUrl',
+            name="ExpiringUrl",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('uuid', models.UUIDField(default=uuid.uuid4)),
-                ('created_at', models.DateTimeField()),
-                ('expires_at', models.DateTimeField()),
-                ('image', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='images.image')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("uuid", models.UUIDField(default=uuid.uuid4)),
+                ("created_at", models.DateTimeField()),
+                ("expires_at", models.DateTimeField()),
+                (
+                    "image",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="images.image"
+                    ),
+                ),
             ],
         ),
     ]

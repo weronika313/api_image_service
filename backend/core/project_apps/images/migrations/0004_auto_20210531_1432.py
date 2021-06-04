@@ -9,22 +9,37 @@ from django.utils.timezone import utc
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('images', '0003_alter_image_created_at'),
+        ("images", "0003_alter_image_created_at"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='image',
-            name='created_at',
-            field=models.DateTimeField(default=datetime.datetime(2021, 5, 31, 12, 32, 33, 290012, tzinfo=utc)),
+            model_name="image",
+            name="created_at",
+            field=models.DateTimeField(
+                default=datetime.datetime(2021, 5, 31, 12, 32, 33, 290012, tzinfo=utc)
+            ),
         ),
         migrations.CreateModel(
-            name='Thumbnail',
+            name="Thumbnail",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('thumbnail', models.URLField()),
-                ('size', models.CharField(max_length=125)),
-                ('org_image', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='images.image')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("thumbnail", models.URLField()),
+                ("size", models.CharField(max_length=125)),
+                (
+                    "org_image",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="images.image"
+                    ),
+                ),
             ],
         ),
     ]

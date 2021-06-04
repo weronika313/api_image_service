@@ -11,18 +11,22 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('images', '0007_alter_image_created_at'),
+        ("images", "0007_alter_image_created_at"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='image',
-            name='created_at',
-            field=models.DateTimeField(default=datetime.datetime(2021, 6, 2, 13, 57, 30, 612452, tzinfo=utc)),
+            model_name="image",
+            name="created_at",
+            field=models.DateTimeField(
+                default=datetime.datetime(2021, 6, 2, 13, 57, 30, 612452, tzinfo=utc)
+            ),
         ),
         migrations.AlterField(
-            model_name='image',
-            name='owner',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="image",
+            name="owner",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('plans', '0002_rename_thumbnail_sizes_plan_available_thumbnail_sizes'),
-        ('users', '0001_initial'),
+        ("plans", "0002_rename_thumbnail_sizes_plan_available_thumbnail_sizes"),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='customuser',
-            name='plan',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='plans.plan'),
+            model_name="customuser",
+            name="plan",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="plans.plan",
+            ),
         ),
     ]

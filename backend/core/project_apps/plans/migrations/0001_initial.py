@@ -7,25 +7,43 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ThumbnailSize',
+            name="ThumbnailSize",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('size', models.IntegerField(default=200)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("size", models.IntegerField(default=200)),
             ],
         ),
         migrations.CreateModel(
-            name='Plan',
+            name="Plan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=125)),
-                ('presence_a_link_to_org_img', models.BooleanField(default=False)),
-                ('ability_to_generate_expiring_links', models.BooleanField(default=False)),
-                ('thumbnail_sizes', models.ManyToManyField(to='plans.ThumbnailSize')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=125)),
+                ("presence_a_link_to_org_img", models.BooleanField(default=False)),
+                (
+                    "ability_to_generate_expiring_links",
+                    models.BooleanField(default=False),
+                ),
+                ("thumbnail_sizes", models.ManyToManyField(to="plans.ThumbnailSize")),
             ],
         ),
     ]

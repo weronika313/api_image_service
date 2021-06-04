@@ -9,11 +9,19 @@ class ImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        read_only_fields = ['owner', 'created_at', ]
-        fields = ['title', 'description','image', 'thumbnails', 'created_at', 'owner', ]
-        extra_kwargs = {
-            'image': {'write_only': True}
-        }
+        read_only_fields = [
+            "owner",
+            "created_at",
+        ]
+        fields = [
+            "title",
+            "description",
+            "image",
+            "thumbnails",
+            "created_at",
+            "owner",
+        ]
+        extra_kwargs = {"image": {"write_only": True}}
 
     def create(self, validated_data):
         image = Image.objects.create(**validated_data)
@@ -33,9 +41,9 @@ class ImageSerializerWithOrgImg(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        read_only_fields = ['owner', 'created_at']
-        write_only_fields = ['image']
-        fields = ['title', 'description', 'image', 'thumbnails', 'created_at', 'owner']
+        read_only_fields = ["owner", "created_at"]
+        write_only_fields = ["image"]
+        fields = ["title", "description", "image", "thumbnails", "created_at", "owner"]
 
     def create(self, validated_data):
         image = Image.objects.create(**validated_data)
@@ -55,5 +63,7 @@ class ExpiringLinkSerializer(serializers.Serializer):
 
     def validate_time_to_expiry(self, value):
         if value < 300 or value > 30000:
-            raise serializers.ValidationError('Time to expiry has to be between 300 and 300000.')
+            raise serializers.ValidationError(
+                "Time to expiry has to be between 300 and 300000."
+            )
         return value

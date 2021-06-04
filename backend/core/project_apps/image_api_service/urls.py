@@ -4,10 +4,14 @@ from rest_framework.routers import DefaultRouter
 from .views import ImageViewSet, ExpiringLinkAPIView
 
 router = DefaultRouter(trailing_slash=False)
-router.register(r'images', ImageViewSet, basename="images")
+router.register(r"images", ImageViewSet, basename="images")
 
 
 urlpatterns = [
     url(r"^", include(router.urls)),
-    path("expiring_image/<link_uuid>", ExpiringLinkAPIView.as_view(), name='expiring-link')
+    path(
+        "expiring_image/<link_uuid>",
+        ExpiringLinkAPIView.as_view(),
+        name="expiring-link",
+    ),
 ]

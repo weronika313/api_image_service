@@ -9,13 +9,13 @@ from PIL import Image as pil_image
 
 
 def user_directory_path(instance, filename):
-    return 'images/{0}/'.format(filename)
+    return "images/{0}/".format(filename)
 
 
 class Image(models.Model):
     title = models.CharField(max_length=125)
     description = models.CharField(max_length=250, null=True)
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to="images/")
     created_at = models.DateTimeField(default=timezone.now())
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -27,14 +27,16 @@ class Image(models.Model):
 
     def make_thumbnail(self, thumbnail_height):
         thumbnail_width = self.get_thumbnail_width(thumbnail_height)
-        size = f'{thumbnail_width}x{thumbnail_height}'
+        size = f"{thumbnail_width}x{thumbnail_height}"
         img = get_thumbnail(self.image, size, quality=90)
-        Thumbnail.objects.create(thumbnail=img.url, size=thumbnail_height, org_image=self)
+        Thumbnail.objects.create(
+            thumbnail=img.url, size=thumbnail_height, org_image=self
+        )
 
     def get_thumbnail_width(self, thumb_height):
         image = pil_image.open(self.image)
         img_width, img_height = image.size
-        height_percent = (thumb_height / float(img_height))
+        height_percent = thumb_height / float(img_height)
         thumb_width = int((float(img_width) * float(height_percent)))
 
         return thumb_width
@@ -53,8 +55,6 @@ class Image(models.Model):
 
     def get_image_thumbnails(self):
         return Thumbnail.objects.filter(org_image=self.pk)
-
-
 
 
 class Thumbnail(models.Model):
@@ -79,4 +79,3 @@ def make_new_thumbnails_if_plan_changed(sender, instance, **kwargs):
             for image in user_images:
 
                 image.generate_image_thumbnails(new_thumb_heights)
-
