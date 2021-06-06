@@ -14,7 +14,7 @@ class ExpiringUrlExpired(Exception):
 
 class ExpiringUrl(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=timezone.now)
     expires_at = models.DateTimeField()
 
     image = models.ForeignKey(Image, on_delete=models.CASCADE)

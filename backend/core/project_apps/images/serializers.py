@@ -4,22 +4,21 @@ from rest_framework import serializers
 from .models import Image
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
     thumbnails = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Image
         read_only_fields = [
-            "owner",
             "created_at",
         ]
         fields = [
+            "url",
             "title",
             "description",
             "image",
             "thumbnails",
             "created_at",
-            "owner",
         ]
         extra_kwargs = {"image": {"write_only": True}}
 
@@ -36,14 +35,13 @@ class ImageSerializer(serializers.ModelSerializer):
         return {f"{thumb.size} px": thumb.thumbnail for thumb in thumbnails}
 
 
-class ImageSerializerWithOrgImg(serializers.ModelSerializer):
+class ImageSerializerWithOrgImg(serializers.HyperlinkedModelSerializer):
     thumbnails = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Image
-        read_only_fields = ["owner", "created_at"]
-        write_only_fields = ["image"]
-        fields = ["title", "description", "image", "thumbnails", "created_at", "owner"]
+        read_only_fields = ["created_at"]
+        fields = ["url", "title", "description", "image", "thumbnails", "created_at"]
 
     def create(self, validated_data):
         image = Image.objects.create(**validated_data)

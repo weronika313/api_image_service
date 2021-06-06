@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ImageViewSet, ExpiringLinkAPIView
 
 router = DefaultRouter(trailing_slash=False)
-router.register(r"images", ImageViewSet, basename="images")
+router.register(r"images", ImageViewSet, basename="image")
 
 
 urlpatterns = [
