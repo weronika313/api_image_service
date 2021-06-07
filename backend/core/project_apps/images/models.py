@@ -58,7 +58,7 @@ class Image(models.Model):
 
 
 class Thumbnail(models.Model):
-    thumbnail = models.URLField()
+    thumbnail = models.URLField(max_length=2000)
     size = models.CharField(max_length=125)
 
     org_image = models.ForeignKey(Image, on_delete=models.CASCADE)
